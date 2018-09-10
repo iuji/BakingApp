@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,10 @@ public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapt
     public ListStepsFragment() {
     }
 
+    public void populateStepList(List<Step> mStepList) {
+        this.mStepList = mStepList;
+    }
+
     // Inflates the GridView of all AndroidMe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,15 +62,20 @@ public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapt
 
         final View rootView = inflater.inflate(R.layout.fragment_list_steps, container, false);
 
-        // Get a reference to the GridView in the fragment_master_list xml layout file
+        // Get a reference to the RecyclerView in the fragment_list_steps xml layout file
         RecyclerView recyclerView = rootView.findViewById(R.id.rv_steps);
 
         // Create the adapter
-        // This adapter takes in the context and an ArrayList of ALL the image resources to display
         StepAdapter mAdapter = new StepAdapter(mStepList, this);
 
-        // Set the adapter on the GridView
+        // Set the adapter on the RecyclerView
         recyclerView.setAdapter(mAdapter);
+
+        // Create the LayoutManager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        // Set the LayoutManager on the RecyclerView
+        recyclerView.setLayoutManager(layoutManager);
 
         // Return the root view
         return rootView;

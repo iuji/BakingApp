@@ -1,5 +1,8 @@
 package com.example.android.bakingapp.model;
 
+import org.parceler.Parcel;
+
+@Parcel
 class Ingredient {
     private float quantity;
     private String measure;

@@ -1,7 +1,10 @@
 package com.example.android.bakingapp.model;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel(Parcel.Serialization.BEAN)
 public class Recipe {
     private int id;
     private String name;

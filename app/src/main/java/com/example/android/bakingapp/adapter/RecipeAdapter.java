@@ -2,6 +2,7 @@ package com.example.android.bakingapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.StepActivity;
 import com.example.android.bakingapp.model.Recipe;
+import com.example.android.bakingapp.model.Step;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -36,13 +40,22 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     @Override
-    public void onBindViewHolder(RecipeViewHolder holder, int position) {
+    public void onBindViewHolder(RecipeViewHolder holder, final int position) {
         String recipeName = mRecipeList.get(position).getName();
         holder.textRecipeName.setText(recipeName);
         holder.cardRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, StepActivity.class);
+                Recipe recipe = mRecipeList.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("recipe", Parcels.wrap(recipe));
+
+                // passing bundle to details activity
+                intent.putExtras(bundle);
+
+                // start the activity
+                mContext.startActivity(intent);
             }
         });
     }

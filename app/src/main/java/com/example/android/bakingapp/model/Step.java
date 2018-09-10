@@ -1,5 +1,8 @@
 package com.example.android.bakingapp.model;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Step {
     private int id;
     private String shortDescription;

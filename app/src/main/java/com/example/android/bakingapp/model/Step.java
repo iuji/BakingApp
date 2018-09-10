@@ -1,6 +1,6 @@
 package com.example.android.bakingapp.model;
 
-class Step {
+public class Step {
     private int id;
     private String shortDescription;
     private String description;

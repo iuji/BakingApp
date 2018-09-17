@@ -19,8 +19,8 @@ public class InfoStepFragment extends Fragment {
     TextView toolbarTitle;
     TextView video;
     TextView textStepDescription;
-    ImageButton beforeButton;
-    ImageButton nextButton;
+    View beforeButton;
+    View nextButton;
     int mPosition;
 
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
@@ -65,8 +65,8 @@ public class InfoStepFragment extends Fragment {
         toolbarTitle = rootView.findViewById(R.id.tv_toolbar_title);
         video = rootView.findViewById(R.id.video);
         textStepDescription = rootView.findViewById(R.id.tv_step_description);
-        beforeButton = rootView.findViewById(R.id.ic_before);
-        nextButton = rootView.findViewById(R.id.ic_next);
+        beforeButton = rootView.findViewById(R.id.view_before);
+        nextButton = rootView.findViewById(R.id.view_next);
 
         Bundle bundle = getArguments();
 
@@ -79,15 +79,14 @@ public class InfoStepFragment extends Fragment {
         beforeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onChangeStep(mPosition--);
+                mCallback.onChangeStep(mPosition-1);
             }
         });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                mCallback.onChangeStep(mPosition++);
+                mCallback.onChangeStep(mPosition+1);
             }
         });
 

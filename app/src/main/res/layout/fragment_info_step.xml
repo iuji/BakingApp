@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar_with_back"
+        layout="@layout/toolbar_without_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -30,7 +30,7 @@
         android:layout_marginTop="8dp"
         android:text="Descricao do passo"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/tv_before"
+        app:layout_constraintBottom_toTopOf="@+id/view_before"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/video"
@@ -63,6 +63,18 @@
         app:layout_constraintStart_toEndOf="@id/ic_before"
         app:layout_constraintTop_toTopOf="@+id/ic_before" />
 
+    <View
+        android:id="@+id/view_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/before_step"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_before"
+        app:layout_constraintEnd_toEndOf="@+id/tv_before"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="@+id/ic_before"
+        app:layout_constraintTop_toTopOf="@+id/tv_before"
+        app:layout_constraintVertical_bias="0.029999971" />
+
     <TextView
         android:id="@+id/tv_next"
         android:layout_width="wrap_content"
@@ -89,5 +101,17 @@
         android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/view_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/before_step"
+        app:layout_constraintBottom_toBottomOf="@id/ic_next"
+        app:layout_constraintEnd_toEndOf="@id/ic_next"
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintStart_toStartOf="@+id/tv_next"
+        app:layout_constraintTop_toTopOf="@id/ic_next"
+        app:layout_constraintVertical_bias="0.029999971" />
 
 </android.support.constraint.ConstraintLayout>

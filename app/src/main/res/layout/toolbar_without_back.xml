@@ -11,18 +11,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryLight"/>
 
-    <ImageButton
-        android:id="@+id/ib_back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_back"
-        app:layout_constraintBottom_toBottomOf="@+id/tb_with_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tv_toolbar_title"
         android:layout_width="wrap_content"
@@ -31,7 +19,7 @@
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@+id/tb_with_back"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ib_back_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tb_with_back" />
 
 </android.support.constraint.ConstraintLayout>

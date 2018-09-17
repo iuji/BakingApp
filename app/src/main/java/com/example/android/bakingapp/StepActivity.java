@@ -34,16 +34,12 @@ public class StepActivity extends AppCompatActivity implements ListStepsFragment
 
     @Override
     public void onStepSelected(int position) {
-        if (position > mRecipe.getSteps().size() || position < 0) {
-            Toast.makeText(this, "No more steps", Toast.LENGTH_SHORT).show();
-        } else {
-            setupInfoStepFragment(position);
-        }
+        setupInfoStepFragment(position);
     }
 
     @Override
     public void onChangeStep(int position) {
-        if (position > mRecipe.getSteps().size() || position < 0) {
+        if (position > (mRecipe.getSteps().size()-1) || position < 0) {
             Toast.makeText(this, "No more steps", Toast.LENGTH_SHORT).show();
         } else {
             setupInfoStepFragment(position);
@@ -66,6 +62,7 @@ public class StepActivity extends AppCompatActivity implements ListStepsFragment
             infoStepFragment.setArguments(bundle);
             tx.addToBackStack(null);
 
+
             tx.replace(R.id.primary_frame, infoStepFragment);
             tx.commit();
         }
@@ -75,7 +72,9 @@ public class StepActivity extends AppCompatActivity implements ListStepsFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction tx = fragmentManager.beginTransaction();
         ListStepsFragment listStepsFragment = new ListStepsFragment();
-        listStepsFragment.setRecipe(mRecipe);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("recipe", Parcels.wrap(mRecipe));
+        listStepsFragment.setArguments(bundle);
         tx.replace(R.id.primary_frame, listStepsFragment);
         if (isTablet()) {
             tx.replace(R.id.secundary_frame, new InfoStepFragment());

@@ -16,6 +16,8 @@ import com.example.android.bakingapp.adapter.IngredientAdapter;
 import com.example.android.bakingapp.adapter.StepAdapter;
 import com.example.android.bakingapp.model.Recipe;
 
+import org.parceler.Parcels;
+
 public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapterOnClickHandler {
     private Recipe mRecipe;
 
@@ -52,8 +54,10 @@ public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapt
         // constructor
     }
 
-    public void setRecipe(Recipe recipe) {
-        mRecipe = recipe;
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("recipe", Parcels.wrap(mRecipe));
     }
 
     // Inflates the GridView of all AndroidMe images
@@ -63,44 +67,54 @@ public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapt
 
         final View rootView = inflater.inflate(R.layout.fragment_list_steps, container, false);
         TextView toolbarTitle = rootView.findViewById(R.id.tv_toolbar_title);
-        toolbarTitle.setText(mRecipe.getName());
 
+        Bundle bundleArgs = getArguments();
 
-        ImageButton backButton = rootView.findViewById(R.id.iv_back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        if(bundleArgs != null){
+            mRecipe = Parcels.unwrap(bundleArgs.getParcelable("recipe"));
+        }else if(savedInstanceState != null){
+            mRecipe = Parcels.unwrap(savedInstanceState.getParcelable("recipe"));
+        }
 
-        // Get a reference to the RecyclerView in the fragment_list_steps xml layout file
-        RecyclerView mStepRecyclerView = rootView.findViewById(R.id.rv_steps);
-        RecyclerView mIngredientRecyclerView = rootView.findViewById(R.id.rv_ingredients);
+        if(mRecipe != null){
+            toolbarTitle.setText(mRecipe.getName());
 
-        // Create the adapter
-        StepAdapter mStepAdapter = new StepAdapter(mRecipe.getSteps(), this);
-        IngredientAdapter mIngredientAdapter = new IngredientAdapter(mRecipe.getIngredients());
+            ImageButton backButton = rootView.findViewById(R.id.ib_back_button);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getActivity().onBackPressed();
+                }
+            });
 
-        // Set the adapter on the RecyclerView
-        mStepRecyclerView.setAdapter(mStepAdapter);
-        mIngredientRecyclerView.setAdapter(mIngredientAdapter);
+            // Get a reference to the RecyclerView in the fragment_list_steps xml layout file
+            RecyclerView mStepRecyclerView = rootView.findViewById(R.id.rv_steps);
+            RecyclerView mIngredientRecyclerView = rootView.findViewById(R.id.rv_ingredients);
 
-        // Set Has Fixed Size
-        mStepRecyclerView.setHasFixedSize(true);
-        mIngredientRecyclerView.setHasFixedSize(true);
+            // Create the adapter
+            StepAdapter mStepAdapter = new StepAdapter(mRecipe.getSteps(), this);
+            IngredientAdapter mIngredientAdapter = new IngredientAdapter(mRecipe.getIngredients());
 
-        // Create the LayoutManager
-        LinearLayoutManager stepLayoutManager = new LinearLayoutManager(getContext());
-        LinearLayoutManager ingredientLayoutManager = new LinearLayoutManager(getContext());
+            // Set the adapter on the RecyclerView
+            mStepRecyclerView.setAdapter(mStepAdapter);
+            mIngredientRecyclerView.setAdapter(mIngredientAdapter);
 
-        // Set the LayoutManager on the RecyclerView
-        mStepRecyclerView.setLayoutManager(stepLayoutManager);
-        mIngredientRecyclerView.setLayoutManager(ingredientLayoutManager);
+            // Set Has Fixed Size
+            mStepRecyclerView.setHasFixedSize(true);
+            mIngredientRecyclerView.setHasFixedSize(true);
 
-        // Disable scrolling into the RecyclerView
-        mStepRecyclerView.setNestedScrollingEnabled(false);
-        mIngredientRecyclerView.setNestedScrollingEnabled(false);
+            // Create the LayoutManager
+            LinearLayoutManager stepLayoutManager = new LinearLayoutManager(getContext());
+            LinearLayoutManager ingredientLayoutManager = new LinearLayoutManager(getContext());
+
+            // Set the LayoutManager on the RecyclerView
+            mStepRecyclerView.setLayoutManager(stepLayoutManager);
+            mIngredientRecyclerView.setLayoutManager(ingredientLayoutManager);
+
+            // Disable scrolling into the RecyclerView
+            mStepRecyclerView.setNestedScrollingEnabled(false);
+            mIngredientRecyclerView.setNestedScrollingEnabled(false);
+        }
 
         // Return the root view
         return rootView;

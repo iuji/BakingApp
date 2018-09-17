@@ -35,6 +35,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
 
     @Override
     public void onBindViewHolder(StepViewHolder holder, int position) {
+        holder.textStepNumber.setText(mStepList.get(position).getId() + " - ");
         holder.textStepName.setText(mStepList.get(position).getShortDescription());
     }
 
@@ -47,10 +48,12 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepViewHolder
     }
 
     class StepViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView textStepNumber;
         TextView textStepName;
 
         StepViewHolder(View itemView) {
             super(itemView);
+            textStepNumber = itemView.findViewById(R.id.tv_step_number);
             textStepName = itemView.findViewById(R.id.tv_step_name);
             itemView.setOnClickListener(this);
         }

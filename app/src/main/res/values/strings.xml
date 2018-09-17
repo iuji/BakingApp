@@ -2,4 +2,9 @@
     <string name="app_name">BakingApp</string>
     <string name="error_message_connection">No internet connection, please check your connection and try again.</string>
     <string name="error_message_default">An error has occurred. Please try again.</string>
+    <string name="title_toolbar">title toolbar</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="before_step">Before Step</string>
+    <string name="next_step">Next Step</string>
 </resources>

@@ -2,34 +2,34 @@ package com.example.android.bakingapp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.example.android.bakingapp.adapter.IngredientAdapter;
 import com.example.android.bakingapp.adapter.StepAdapter;
-import com.example.android.bakingapp.model.Step;
-
-import java.util.List;
+import com.example.android.bakingapp.model.Recipe;
 
 public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapterOnClickHandler {
-    List<Step> mStepList;
+    private Recipe mRecipe;
 
-    // Define a new interface OnImageClickListener that triggers a callback in the host activity
+    // Define a new interface OnStepClickListener that triggers a callback in the host activity
     OnStepClickListener mCallback;
 
     // OnImageClickListener interface, calls a method in the host activity named onImageSelected
     public interface OnStepClickListener {
-        void onStepSelected(Step stepSelected);
+        void onStepSelected(int position);
     }
 
     @Override
-    public void onClick(Step stepSelected) {
-        mCallback.onStepSelected(stepSelected);
+    public void onClick(int position) {
+        mCallback.onStepSelected(position);
     }
 
     // Override onAttach to make sure that the container activity has implemented the callback
@@ -49,33 +49,58 @@ public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapt
 
     // Mandatory empty constructor
     public ListStepsFragment() {
+        // constructor
     }
 
-    public void populateStepList(List<Step> mStepList) {
-        this.mStepList = mStepList;
+    public void setRecipe(Recipe recipe) {
+        mRecipe = recipe;
     }
 
     // Inflates the GridView of all AndroidMe images
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_list_steps, container, false);
+        TextView toolbarTitle = rootView.findViewById(R.id.tv_toolbar_title);
+        toolbarTitle.setText(mRecipe.getName());
+
+
+        ImageButton backButton = rootView.findViewById(R.id.iv_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
 
         // Get a reference to the RecyclerView in the fragment_list_steps xml layout file
-        RecyclerView recyclerView = rootView.findViewById(R.id.rv_steps);
+        RecyclerView mStepRecyclerView = rootView.findViewById(R.id.rv_steps);
+        RecyclerView mIngredientRecyclerView = rootView.findViewById(R.id.rv_ingredients);
 
         // Create the adapter
-        StepAdapter mAdapter = new StepAdapter(mStepList, this);
+        StepAdapter mStepAdapter = new StepAdapter(mRecipe.getSteps(), this);
+        IngredientAdapter mIngredientAdapter = new IngredientAdapter(mRecipe.getIngredients());
 
         // Set the adapter on the RecyclerView
-        recyclerView.setAdapter(mAdapter);
+        mStepRecyclerView.setAdapter(mStepAdapter);
+        mIngredientRecyclerView.setAdapter(mIngredientAdapter);
+
+        // Set Has Fixed Size
+        mStepRecyclerView.setHasFixedSize(true);
+        mIngredientRecyclerView.setHasFixedSize(true);
 
         // Create the LayoutManager
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager stepLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager ingredientLayoutManager = new LinearLayoutManager(getContext());
 
         // Set the LayoutManager on the RecyclerView
-        recyclerView.setLayoutManager(layoutManager);
+        mStepRecyclerView.setLayoutManager(stepLayoutManager);
+        mIngredientRecyclerView.setLayoutManager(ingredientLayoutManager);
+
+        // Disable scrolling into the RecyclerView
+        mStepRecyclerView.setNestedScrollingEnabled(false);
+        mIngredientRecyclerView.setNestedScrollingEnabled(false);
 
         // Return the root view
         return rootView;

@@ -3,7 +3,7 @@ package com.example.android.bakingapp.model;
 import org.parceler.Parcel;
 
 @Parcel
-class Ingredient {
+public class Ingredient {
     private float quantity;
     private String measure;
     private String ingredient;

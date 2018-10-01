@@ -7,4 +7,5 @@
     <string name="steps">Steps</string>
     <string name="before_step">Before Step</string>
     <string name="next_step">Next Step</string>
+    <string name="no_video_available">No video available</string>
 </resources>

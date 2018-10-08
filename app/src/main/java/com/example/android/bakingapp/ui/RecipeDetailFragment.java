@@ -1,4 +1,4 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,13 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapter.IngredientAdapter;
 import com.example.android.bakingapp.adapter.StepAdapter;
 import com.example.android.bakingapp.model.Recipe;
 
 import org.parceler.Parcels;
 
-public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapterOnClickHandler {
+public class RecipeDetailFragment extends Fragment implements StepAdapter.StepAdapterOnClickHandler {
     private Recipe mRecipe;
 
     // Define a new interface OnStepClickListener that triggers a callback in the host activity
@@ -50,7 +51,7 @@ public class ListStepsFragment extends Fragment implements StepAdapter.StepAdapt
     }
 
     // Mandatory empty constructor
-    public ListStepsFragment() {
+    public RecipeDetailFragment() {
         // constructor
     }
 

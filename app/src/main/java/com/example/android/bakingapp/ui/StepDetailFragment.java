@@ -1,4 +1,4 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.ui;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Step;
+import com.example.android.bakingapp.utils.Validator;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -33,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class InfoStepFragment extends Fragment {
+public class StepDetailFragment extends Fragment {
     @BindView(R.id.tv_toolbar_title)
     TextView toolbarTitle;
     @BindView(R.id.tv_no_video)
@@ -64,7 +66,7 @@ public class InfoStepFragment extends Fragment {
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     OnChangeStepClickListener mCallback;
 
-    public InfoStepFragment() {
+    public StepDetailFragment() {
         // constructor
     }
 
@@ -95,7 +97,7 @@ public class InfoStepFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         Bundle bundle = getArguments();
-        if (isLandscapeAndIsNotTablet()) {
+        if (Validator.isLandscapeAndIsNotTablet(getContext())) {
             toolbar.setVisibility(View.GONE);
             viewBefore.setVisibility(View.GONE);
             iconBefore.setVisibility(View.GONE);
@@ -179,9 +181,6 @@ public class InfoStepFragment extends Fragment {
         }
     }
 
-    private boolean isLandscapeAndIsNotTablet() {
-        return getResources().getBoolean(R.bool.isLand) && !getResources().getBoolean(R.bool.isTablet);
-    }
 
     @Override
     public void onDestroyView() {

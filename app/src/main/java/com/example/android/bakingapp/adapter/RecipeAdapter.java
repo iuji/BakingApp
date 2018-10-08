@@ -11,9 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.StepActivity;
+import com.example.android.bakingapp.ui.StepActivity;
 import com.example.android.bakingapp.model.Recipe;
-import com.example.android.bakingapp.model.Step;
+import com.example.android.bakingapp.utils.Constants;
+import com.example.android.bakingapp.widget.IngredientWidgetProvider;
 
 import org.parceler.Parcels;
 
@@ -56,6 +57,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
                 // start the activity
                 mContext.startActivity(intent);
+
+                //sends recipe to widget
+                Intent intentProvider = new Intent(mContext, IngredientWidgetProvider.class);
+                intentProvider.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                intentProvider.putExtra(Constants.RECIPE_TO_WIDGET, Parcels.wrap(recipe));
+                mContext.sendBroadcast(intentProvider);
             }
         });
     }

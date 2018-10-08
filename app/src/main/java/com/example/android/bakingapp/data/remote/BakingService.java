@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.api;
+package com.example.android.bakingapp.data.remote;
 
 import com.example.android.bakingapp.model.Recipe;
 

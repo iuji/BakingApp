@@ -1,7 +1,6 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.ui;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -9,12 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.model.Step;
+import com.example.android.bakingapp.utils.Validator;
 
 import org.parceler.Parcels;
 
-public class StepActivity extends AppCompatActivity implements ListStepsFragment.OnStepClickListener, InfoStepFragment.OnChangeStepClickListener {
+public class StepActivity extends AppCompatActivity implements RecipeDetailFragment.OnStepClickListener, StepDetailFragment.OnChangeStepClickListener {
     private Recipe mRecipe;
 
     @Override
@@ -40,10 +41,6 @@ public class StepActivity extends AppCompatActivity implements ListStepsFragment
         outState.putParcelable("recipe", Parcels.wrap(mRecipe));
     }
 
-    private boolean isTablet() {
-        return getResources().getBoolean(R.bool.isTablet);
-    }
-
     @Override
     public void onStepSelected(int position) {
         setupInfoStepFragment(position);
@@ -62,17 +59,17 @@ public class StepActivity extends AppCompatActivity implements ListStepsFragment
         Step stepSelected = mRecipe.getSteps().get(position);
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction tx = manager.beginTransaction();
-        InfoStepFragment infoStepFragment = new InfoStepFragment();
+        StepDetailFragment stepDetailFragment = new StepDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("step", Parcels.wrap(stepSelected));
         bundle.putInt("position", position);
-        infoStepFragment.setArguments(bundle);
-        if (isTablet()) {
-            tx.replace(R.id.secundary_frame, infoStepFragment);
+        stepDetailFragment.setArguments(bundle);
+        if (Validator.isTablet(getApplicationContext())) {
+            tx.replace(R.id.secundary_frame, stepDetailFragment);
             tx.commit();
         } else {
             tx.addToBackStack(null);
-            tx.replace(R.id.primary_frame, infoStepFragment);
+            tx.replace(R.id.primary_frame, stepDetailFragment);
             tx.commit();
         }
     }
@@ -80,11 +77,11 @@ public class StepActivity extends AppCompatActivity implements ListStepsFragment
     private void setupListStepsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction tx = fragmentManager.beginTransaction();
-        ListStepsFragment listStepsFragment = new ListStepsFragment();
+        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("recipe", Parcels.wrap(mRecipe));
-        listStepsFragment.setArguments(bundle);
-        tx.replace(R.id.primary_frame, listStepsFragment);
+        recipeDetailFragment.setArguments(bundle);
+        tx.replace(R.id.primary_frame, recipeDetailFragment);
         tx.commit();
     }
 

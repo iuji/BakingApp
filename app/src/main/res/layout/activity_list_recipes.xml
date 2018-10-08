@@ -40,5 +40,5 @@
         android:layout_height="42dp"
         android:layout_gravity="center"
         android:progressTint="@color/colorPrimaryDark"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </FrameLayout>

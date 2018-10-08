@@ -7,19 +7,32 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_cheesecake"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_cheesecake"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListRecipesActivity">
+        <activity android:name=".ui.ListRecipesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StepActivity" />
+        <activity android:name=".ui.StepActivity" />
+
+        <service
+            android:name=".widget.IngredientWidgetService" />
+
+        <receiver android:name=".widget.IngredientWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ingredient_widget_provider_info" />
+        </receiver>
     </application>
 
 </manifest>

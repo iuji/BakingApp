@@ -8,4 +8,6 @@
     <string name="before_step">Before Step</string>
     <string name="next_step">Next Step</string>
     <string name="no_video_available">No video available</string>
+    <string name="no_recipe">No Recipe</string>
+    <string name="select_recipe">Select recipe for ingredients list</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,13 +11,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapter.RecipeAdapter;
-import com.example.android.bakingapp.api.BakingService;
-import com.example.android.bakingapp.api.Client;
+import com.example.android.bakingapp.data.remote.BakingService;
+import com.example.android.bakingapp.data.remote.Client;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.utils.Connectivity;
+import com.example.android.bakingapp.utils.Validator;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -40,6 +43,7 @@ public class ListRecipesActivity extends AppCompatActivity {
 
     private static final String TAG = ListRecipesActivity.class.getSimpleName();
     private RecipeAdapter mAdapter;
+    private List<Recipe> mRecipeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +51,30 @@ public class ListRecipesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_recipes);
         ButterKnife.bind(this);
         setupRecyclerView();
-        createRetrofit();
+        if (savedInstanceState != null && savedInstanceState.getParcelable("recipeList") != null) {
+            mRecipeList = Parcels.unwrap(savedInstanceState.getParcelable("recipeList"));
+            mAdapter.setRecipeList(mRecipeList);
+        } else {
+            createRetrofit();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("recipeList", Parcels.wrap(mRecipeList));
     }
 
     private void setupRecyclerView() {
         mAdapter = new RecipeAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numberOfColumns());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(layoutManager);
+        if (Validator.isTablet(getApplicationContext())) {
+            mRecyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            mRecyclerView.setLayoutManager(layoutManager);
+        }
     }
 
     private void createRetrofit() {
@@ -69,7 +89,8 @@ public class ListRecipesActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                     if (response.isSuccessful()) {
-                        mAdapter.setRecipeList(response.body());
+                        mRecipeList = response.body();
+                        mAdapter.setRecipeList(mRecipeList);
                         endLoading();
                         showListMovieView();
                     } else {
@@ -92,6 +113,7 @@ public class ListRecipesActivity extends AppCompatActivity {
             showErrorMessage();
         }
     }
+
     private int numberOfColumns() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);

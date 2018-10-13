@@ -142,6 +142,7 @@ public class StepDetailFragment extends Fragment {
     private void setupPlayer() {
         if (!mStep.getVideoURL().equals("")) {
             textNoVideo.setVisibility(View.GONE);
+            mPlayerView.setVisibility(View.VISIBLE);
             initializePlayer(Uri.parse(mStep.getVideoURL()));
         } else {
             mPlayerView.setVisibility(View.GONE);
@@ -155,6 +156,7 @@ public class StepDetailFragment extends Fragment {
             mPosition = position;
             toolbarTitle.setText(step.getShortDescription());
             textStepDescription.setText(step.getDescription());
+            releasePlayer();
             setupPlayer();
         }
     }

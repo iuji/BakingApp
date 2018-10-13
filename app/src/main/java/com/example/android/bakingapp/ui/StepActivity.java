@@ -17,12 +17,13 @@ import org.parceler.Parcels;
 
 public class StepActivity extends AppCompatActivity implements RecipeDetailFragment.OnStepClickListener, StepDetailFragment.OnChangeStepClickListener {
     private Recipe mRecipe;
+    private Step mStep;
+    private StepDetailFragment mStepDetailFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
-
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
@@ -43,7 +44,7 @@ public class StepActivity extends AppCompatActivity implements RecipeDetailFragm
 
     @Override
     public void onStepSelected(int position) {
-        setupInfoStepFragment(position);
+        setupStepDetailFragment(position);
     }
 
     @Override
@@ -51,26 +52,33 @@ public class StepActivity extends AppCompatActivity implements RecipeDetailFragm
         if (position > (mRecipe.getSteps().size()-1) || position < 0) {
             Toast.makeText(this, "No more steps", Toast.LENGTH_SHORT).show();
         } else {
-            setupInfoStepFragment(position);
+            updateData(position);
         }
     }
 
-    private void setupInfoStepFragment(int position) {
-        Step stepSelected = mRecipe.getSteps().get(position);
+    private void setupStepDetailFragment(int position) {
+        mStep = mRecipe.getSteps().get(position);
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction tx = manager.beginTransaction();
-        StepDetailFragment stepDetailFragment = new StepDetailFragment();
+        mStepDetailFragment = new StepDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("step", Parcels.wrap(stepSelected));
+        bundle.putParcelable("step", Parcels.wrap(mStep));
         bundle.putInt("position", position);
-        stepDetailFragment.setArguments(bundle);
+        mStepDetailFragment.setArguments(bundle);
         if (Validator.isTablet(getApplicationContext())) {
-            tx.replace(R.id.secundary_frame, stepDetailFragment);
+            tx.replace(R.id.secundary_frame, mStepDetailFragment);
             tx.commit();
         } else {
             tx.addToBackStack(null);
-            tx.replace(R.id.primary_frame, stepDetailFragment);
+            tx.replace(R.id.primary_frame, mStepDetailFragment);
             tx.commit();
+        }
+    }
+
+    private void updateData(int position){
+        mStep = mRecipe.getSteps().get(position);
+        if(mStepDetailFragment != null){
+            mStepDetailFragment.populateView(mStep, position);
         }
     }
 

@@ -1,5 +1,9 @@
 package com.example.android.bakingapp.ui;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,10 +18,11 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapter.RecipeAdapter;
-import com.example.android.bakingapp.data.remote.BakingService;
+import com.example.android.bakingapp.data.remote.RecipeService;
 import com.example.android.bakingapp.data.remote.Client;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.utils.Connectivity;
+import com.example.android.bakingapp.utils.SimpleIdlingResource;
 import com.example.android.bakingapp.utils.Validator;
 
 import org.parceler.Parcels;
@@ -44,13 +49,24 @@ public class ListRecipesActivity extends AppCompatActivity {
     private static final String TAG = ListRecipesActivity.class.getSimpleName();
     private RecipeAdapter mAdapter;
     private List<Recipe> mRecipeList;
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
 
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource(){
+        if(mIdlingResource == null){
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_recipes);
         ButterKnife.bind(this);
         setupRecyclerView();
+        getIdlingResource();
         if (savedInstanceState != null && savedInstanceState.getParcelable("recipeList") != null) {
             mRecipeList = Parcels.unwrap(savedInstanceState.getParcelable("recipeList"));
             mAdapter.setRecipeList(mRecipeList);
@@ -80,8 +96,9 @@ public class ListRecipesActivity extends AppCompatActivity {
     private void createRetrofit() {
         startLoading();
         if (Connectivity.isConnected(this)) {
+            mIdlingResource.setIdleState(false);
             Retrofit retrofit = Client.getClient();
-            BakingService service = retrofit.create(BakingService.class);
+            RecipeService service = retrofit.create(RecipeService.class);
 
             Call<List<Recipe>> requestRecipes = service.listRecipe();
 
@@ -93,10 +110,12 @@ public class ListRecipesActivity extends AppCompatActivity {
                         mAdapter.setRecipeList(mRecipeList);
                         endLoading();
                         showListMovieView();
+                        mIdlingResource.setIdleState(true);
                     } else {
                         Log.e(TAG, "erro: " + response.code());
                         endLoading();
                         showErrorMessage();
+                        mIdlingResource.setIdleState(true);
                     }
                 }
 

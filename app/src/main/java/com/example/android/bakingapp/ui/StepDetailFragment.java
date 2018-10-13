@@ -109,14 +109,14 @@ public class StepDetailFragment extends Fragment {
 
         if (savedInstanceState == null) {
             if (bundle != null) {
-                mStep = Parcels.unwrap(bundle.getParcelable("step"));
+                Step step = Parcels.unwrap(bundle.getParcelable("step"));
                 int postion = bundle.getInt("position");
-                populateView(mStep, postion);
+                populateView(step, postion);
             }
         } else {
-            mStep = Parcels.unwrap(savedInstanceState.getParcelable("step"));
+            Step step = Parcels.unwrap(savedInstanceState.getParcelable("step"));
             int position = savedInstanceState.getInt("position");
-            populateView(mStep, position);
+            populateView(step, position);
         }
 
         return rootView;
@@ -151,6 +151,7 @@ public class StepDetailFragment extends Fragment {
 
     public void populateView(Step step, int position) {
         if(step != null){
+            mStep = step;
             mPosition = position;
             toolbarTitle.setText(step.getShortDescription());
             textStepDescription.setText(step.getDescription());
@@ -181,11 +182,9 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (mStep != null) releasePlayer();
     }
-
 }

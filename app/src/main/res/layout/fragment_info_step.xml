@@ -20,6 +20,7 @@
             android:id="@+id/media_player"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:resize_mode="fixed_width"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView

@@ -1,12 +1,10 @@
 package com.example.android.bakingapp.widget;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.Nullable;
 
 import com.example.android.bakingapp.model.Recipe;
@@ -27,18 +25,17 @@ public class IngredientWidgetService extends IntentService {
         Intent intent = new Intent(context, IngredientWidgetService.class);
         intent.setAction(ACTION_UPDATE_WIDGET);
         intent.putExtra(RECIPE_ITEM_EXTRA_WIDGET, Parcels.wrap(recipe));
-        //workaround for IllegalArgumentException
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent);
-        } else {
+        //workaround for IllegalStateException
+        try {
             context.startService(new Intent(intent));
+        } catch (IllegalStateException ex) {
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        startForeground(1,new Notification());
     }
 
     //onHandleIntent extracts action and handles each action seperately
@@ -54,7 +51,6 @@ public class IngredientWidgetService extends IntentService {
     }
 
     public void handleUpdateWidget(Recipe recipe) {
-
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                 IngredientWidgetProvider.class));
